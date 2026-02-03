@@ -41,31 +41,45 @@ class MovieController extends Controller
     }
 
     /**
+     * POST /api/movies
+     * Creates a new movie.
      * @throws Throwable
      */
     public function store(StoreMovieRequest $request)
     {
         $movie = $this->service->create($request->validated());
 
-        return new MovieResource($movie);
+        return new MovieResource($movie->load('genres'));
     }
 
     /**
+     * PUT /api/movies/{id}
+     * Updates an existing movie.
      * @throws Throwable
      */
     public function update(UpdateMovieRequest $request, Movie $movie)
     {
         $movie = $this->service->update($movie, $request->validated());
 
-        return new MovieResource($movie);
+        return new MovieResource($movie->load('genres'));
     }
 
+
+    /**
+     * DELETE /api/movies/{id}
+     * Deletes a specific movie.
+     */
     public function destroy(Movie $movie)
     {
         $movie->delete();
         return response()->json(['message' => 'Movie deleted successfully']);
     }
 
+
+    /**
+     * PATCH /api/movies/{id}/publish
+     * Publishes a specific movie.
+     */
     public function publish(Movie $movie)
     {
         $this->service->publish($movie);
