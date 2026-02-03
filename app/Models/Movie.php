@@ -27,16 +27,6 @@ class Movie extends Model
         return $this->belongsToMany(Genre::class);
     }
 
-    public function publish(): void
-    {
-        $this->update(['is_published' => true]);
-    }
-
-    public function unpublish(): void
-    {
-        $this->update(['is_published' => false]);
-    }
-
     public function hasPoster(): bool
     {
         return !empty($this->poster_url);
