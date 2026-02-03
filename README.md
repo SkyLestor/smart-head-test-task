@@ -1,59 +1,300 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Smart Head Test Task API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API application for managing a movie catalog, built with Laravel 11.
 
-## About Laravel
+## Installation and Setup
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Follow these steps to set up and run the project locally.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Clone the repository
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+git clone <repository-url>
+cd smart-head-test-task
+```
 
-## Learning Laravel
+### 2. Install dependencies
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 3. Environment Configuration
 
-## Laravel Sponsors
+Copy the example environment file and generate the application key.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-### Premium Partners
+Open the `.env` file and configure your database settings (DB_DATABASE, DB_USERNAME, DB_PASSWORD).
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 4. Database Migration and Seeding
 
-## Contributing
+Run the migrations to create the database tables and seed them with default data (genres and test movies).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan migrate --seed
+```
 
-## Code of Conduct
+### 5. Link Storage
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Create a symbolic link to make uploaded files accessible from the web.
 
-## Security Vulnerabilities
+```bash
+php artisan storage:link
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 6. Run the Server
 
-## License
+Start the local development server.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan serve
+```
+
+The API will be available at `http://127.0.0.1:8000/api`.
+
+---
+
+## API Documentation
+
+### Genres
+
+#### List All Genres
+
+Returns a list of all available genres.
+
+* **URL:** `/api/genres`
+* **Method:** `GET`
+* **Success Response:**
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Horror"
+        },
+        {
+            "id": 2,
+            "name": "Sci-Fi"
+        }
+    ]
+}
+```
+
+#### Get Genre Details
+
+Returns a paginated list of movies belonging to a specific genre.
+
+* **URL:** `/api/genres/{id}`
+* **Method:** `GET`
+* **Success Response:**
+
+```json
+{
+    "data": [
+        {
+            "id": 5,
+            "title": "Movie Title",
+            "poster_url": "https://placehold.co/400x600/2c3e50/ffffff?text=Movie+Poster",
+            "is_published": true,
+            "genres": []
+        }
+    ],
+    "links": {
+        ...
+    },
+    "meta": {
+        ...
+    }
+}
+```
+
+---
+
+### Movies
+
+#### List All Movies
+
+Returns a paginated list of movies.
+
+* **URL:** `/api/movies`
+* **Method:** `GET`
+* **Success Response:**
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "title": "Movie Title",
+            "poster_url": "https://placehold.co/400x600/2c3e50/ffffff?text=Movie+Poster",
+            "is_published": true,
+            "genres": [
+                {
+                    "id": 1,
+                    "name": "Horror"
+                }
+            ]
+        }
+    ],
+    "links": {
+        ...
+    },
+    "meta": {
+        ...
+    }
+}
+```
+
+#### Get Movie Details
+
+Returns details for a single movie.
+
+* **URL:** `/api/movies/{id}`
+* **Method:** `GET`
+* **Success Response:**
+
+```json
+{
+    "data": {
+        "id": 1,
+        "title": "Inception",
+        "poster_url": "[http://127.0.0.1:8000/storage/posters/inception.jpg](http://127.0.0.1:8000/storage/posters/inception.jpg)",
+        "is_published": true,
+        "genres": [
+            {
+                "id": 1,
+                "name": "Sci-Fi"
+            },
+            {
+                "id": 2,
+                "name": "Action"
+            }
+        ]
+    }
+}
+```
+
+#### Create Movie
+
+Creates a new movie.
+
+* **URL:** `/api/movies`
+* **Method:** `POST`
+* **Content-Type:** `multipart/form-data`
+* **Parameters:**
+* `title` (required, string): The title of the movie.
+* `poster` (optional, file): Image file (jpeg, png, jpg, webp, max 2MB).
+* `genres[]` (required, array): Array of genre IDs.
+
+
+* **Request Example (Form Data):**
+* `title`: "Interstellar"
+* `genres[]`: 2
+* `genres[]`: 3
+* `poster`: (Binary File)
+
+
+* **Success Response (201 Created):**
+
+```json
+{
+    "data": {
+        "id": 2,
+        "title": "Interstellar",
+        "poster_url": "[http://127.0.0.1:8000/storage/posters/hash.jpg](http://127.0.0.1:8000/storage/posters/hash.jpg)",
+        "is_published": false,
+        "genres": [
+            {
+                "id": 2,
+                "name": "Sci-Fi"
+            },
+            {
+                "id": 3,
+                "name": "Thriller"
+            }
+        ]
+    }
+}
+```
+
+#### Update Movie
+
+Updates an existing movie.
+
+* **URL:** `/api/movies/{id}`
+* **Method:** `PUT` (or `POST` with `_method=PUT` if uploading a file)
+* **Content-Type:** `application/x-www-form-urlencoded` or `multipart/form-data`
+* **Parameters:**
+* `title` (optional, string)
+* `poster` (optional, file)
+* `genres[]` (optional, array)
+
+
+* **Request Body Example (JSON):**
+
+```json
+{
+    "title": "Interstellar (Remastered)",
+    "genres": [
+        2,
+        3
+    ]
+}
+```
+
+* **Success Response:**
+
+```json
+{
+    "data": {
+        "id": 2,
+        "title": "Interstellar (Remastered)",
+        "poster_url": "...",
+        "is_published": false,
+        "genres": [
+            ...
+        ]
+    }
+}
+```
+
+#### Publish / Unpublish Movie
+
+Toggles the publication status of a movie.
+
+* **URL:** `/api/movies/{id}/publish`
+* **Method:** `PATCH`
+* **Success Response:**
+
+```json
+{
+    "data": {
+        "id": 2,
+        "title": "Interstellar",
+        "poster_url": "...",
+        "is_published": true,
+        "genres": [
+            ...
+        ]
+    }
+}
+```
+
+#### Delete Movie
+
+Removes a movie from the database.
+
+* **URL:** `/api/movies/{id}`
+* **Method:** `DELETE`
+* **Success Response (200 OK):**
+
+```json
+{
+    "message": "Movie deleted successfully"
+}
+```
