@@ -98,4 +98,16 @@ class MovieService
 
         return self::DEFAULT_IMAGE_PATH;
     }
+
+    public function publish(Movie $movie): void
+    {
+        $movie->update(['is_published' => true]);
+    }
+
+    public function unpublish(Movie $movie): void
+    {
+        $movie->update(['is_published' => false]);
+    }
+
+
 }
