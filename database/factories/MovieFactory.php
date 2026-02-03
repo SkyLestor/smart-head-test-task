@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Movie;
+use App\Services\MovieService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Movie>
+ * @extends Factory<Movie>
  */
 class MovieFactory extends Factory
 {
@@ -19,7 +21,7 @@ class MovieFactory extends Factory
         return [
             'title' => fake()->sentence(3),
             'is_published' => fake()->boolean(70),
-            'poster_url' => 'https://placehold.co/400x600/2c3e50/ffffff?text=Movie+Poster',
+            'poster_url' => MovieService::DEFAULT_IMAGE_PATH,
         ];
     }
 }
